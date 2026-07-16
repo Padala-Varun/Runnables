@@ -42,7 +42,7 @@ message.append(result)
 
 if result.tool_calls:
     tool_name=result.tool_calls[0]["name"]
-    tool_message=tools[tool_name].invoke(result.tool_calls[0]["args"])
+    tool_message=tools[tool_name].invoke(result.tool_calls[0])
     #message.append(tool_message)
 
     
