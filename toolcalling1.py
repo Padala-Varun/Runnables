@@ -17,6 +17,10 @@ def get_text_length(text:str) ->int:
     """Return the number of character in a given text"""
     return len(text)
 
+tools = {
+    "get_text_length":get_text_length
+}
+
 llm=ChatMistralAI(model="mistral-small-2506")
 
 #tool binding
@@ -24,7 +28,9 @@ llm_with_tools=llm.bind_tools([get_text_length])
 
 message = []
 
-query=HumanMessage("Return the number of charcters in the given text :'Hello how are you'")
+prompt = input("You : ") 
+
+query=HumanMessage(prompt)
 
 message.append(query)
 
@@ -32,4 +38,15 @@ result = llm_with_tools.invoke(message)
 
 message.append(result)
 
-print(message)
+#print(message)
+
+if result.tool_calls:
+    tool_name=result.tool_calls[0]["name"]
+    tool_message=tools[tool_name].invoke(result.tool_calls[0]["args"])
+    #message.append(tool_message)
+
+    
+    #print(message)
+
+    #result = llm_with_tools.invoke(message)
+print(result.content)
